@@ -1,0 +1,20 @@
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+
+# Arquivos locais e temporários
+__pycache__/
+*.py[cod]
+.DS_Store
+instance/
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql
+
+# Ambientes e editores
+.venv/
+venv/
+.vscode/
