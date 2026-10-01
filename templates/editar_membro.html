@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Alterar membro | AD System{% endblock %}{% block content %}
+<div class="page-heading"><p class="eyebrow">MEMBROS</p><h1>Alterar membro</h1><p>Atualize os dados do cadastro.</p></div>
+<form method="post" class="panel form-grid members-form">
+  <label>Nome<input name="nome" maxlength="160" value="{{ membro[1] }}" required></label>
+  <label>Telefone<input name="telefone" type="tel" maxlength="11" value="{{ membro[2] or '' }}"></label>
+  <label>Endereço<input name="endereco" value="{{ membro[3] or '' }}"></label>
+  <label>Data de nascimento<input name="data_nascimento" type="date" value="{{ membro[4].isoformat() if membro[4] else '' }}"></label>
+  <div class="form-actions"><button class="button primary" type="submit">Salvar alterações</button><a class="button secondary" href="{{ url_for('pessoas') }}">Cancelar</a></div>
+</form>{% endblock %}

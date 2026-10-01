@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Gerenciar grupos | AD System{% endblock %}
+{% block content %}
+<section class="page-heading"><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Gerenciar grupos</h1><p>Escolha os nomes dos grupos. Você pode cadastrar até {{ limite_grupos }} grupos; atualmente existem {{ total_grupos }}.</p><a class="button secondary small" href="{{ url_for('admin_acessos') }}">Voltar aos acessos</a></section>
+{% if total_grupos < limite_grupos %}
+<section class="panel">
+  <h2 class="section-title">Criar grupo</h2>
+  <form action="{{ url_for('admin_novo_grupo') }}" method="post" class="inline-group-form">
+    <label>Nome do grupo<input name="nome" maxlength="100" required placeholder="Ex.: Música"></label>
+    <button class="button primary" type="submit">Criar grupo</button>
+  </form>
+</section>
+{% endif %}
+<section class="panel table-wrap">
+  <h2 class="section-title">Grupos cadastrados</h2>
+  <table><thead><tr><th>Nome do grupo</th><th>Acesso do líder</th><th>Situação</th><th>Opções</th></tr></thead><tbody>
+  {% for id_grupo,nome,id_usuario,usuario,ativo in grupos %}
+  <tr><td><form class="rename-group-form" action="{{ url_for('admin_renomear_grupo', group_id=id_grupo) }}" method="post"><input name="nome" value="{{ nome }}" maxlength="100" required aria-label="Nome do grupo {{ nome }}"><button class="button secondary small" type="submit">Salvar nome</button></form></td>
+  <td>{{ usuario or 'Sem acesso' }}</td><td>{% if id_usuario %}<span class="tag {{ 'green' if ativo else 'red' }}">{{ 'Ativo' if ativo else 'Desativado' }}</span>{% else %}<span class="muted">Sem acesso</span>{% endif %}</td>
+  <td><form action="{{ url_for('admin_excluir_grupo', group_id=id_grupo) }}" method="post"><button class="delete-button" type="submit">Excluir grupo vazio</button></form></td></tr>
+  {% else %}<tr><td colspan="4" class="empty">Ainda não há grupos. Crie o primeiro acima.</td></tr>{% endfor %}
+  </tbody></table>
+</section>
+{% endblock %}

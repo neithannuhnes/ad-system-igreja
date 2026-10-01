@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block title %}{{ titulo }} | AD System{% endblock %}{% block content %}
+<div class="page-heading"><p class="eyebrow">CAIXA</p><h1>{{ titulo }}</h1><p>Preencha os dados para lançar esta movimentação.</p></div>
+<form method="post" class="panel form-grid">
+  <label>Descrição<input name="descricao" maxlength="180" placeholder="Ex.: Oferta do encontro" required></label>
+  <label>Categoria<select name="id_categoria" required><option value="">Escolha uma categoria</option>{% for id,nome in categorias %}<option value="{{ id }}">{{ nome }}</option>{% endfor %}</select></label>
+  {% if tipo == 'despesa' %}<label>Atividade relacionada (opcional)<select name="id_atividade"><option value="">Sem atividade específica</option>{% for id,nome in atividades %}<option value="{{ id }}">{{ nome }}</option>{% endfor %}</select></label>{% endif %}
+  <label>Valor (R$)<input name="valor" inputmode="decimal" placeholder="0,00" required></label>
+  <label>Data<input type="date" name="data" value="{{ request.form.get('data','') or '' }}" required></label>
+  <div class="form-actions"><button class="button primary">Salvar {{ 'entrada' if tipo=='entrada' else 'despesa' }}</button><a class="button secondary" href="{{ url_for('inicio') }}">Cancelar</a></div>
+</form>{% endblock %}

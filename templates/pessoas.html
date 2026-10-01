@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% block title %}Membros | AD System{% endblock %}{% block content %}
+<div class="page-heading report-heading"><div class="report-heading-main"><p class="eyebrow">CADASTRO</p><h1>Membros</h1><p>Consulte e filtre os membros cadastrados.</p><a class="button secondary small" href="{{ url_for('inicio') }}">← Voltar ao painel</a></div><a class="button primary report-download" href="{{ url_for('pdf_membros', nome=nome_filtro, idade_modo=idade_modo, idade=idade_texto, idade_de=idade_de_texto, idade_ate=idade_ate_texto) }}">Baixar PDF</a></div>
+<div class="member-toolbar">
+<details class="member-create"><summary class="button primary">＋ Cadastrar membro</summary>
+  <form method="post" class="panel form-grid members-form">
+    <label>Nome<input name="nome" maxlength="160" placeholder="Nome completo" required></label>
+    <label>Telefone<input name="telefone" type="tel" maxlength="11" placeholder="Até 11 caracteres"></label>
+    <label>Endereço<input name="endereco" placeholder="Rua, número, bairro, cidade"></label>
+    <label>Data de nascimento<input name="data_nascimento" type="date"></label>
+    <div class="form-actions"><button class="button primary" type="submit">Salvar membro</button></div>
+  </form>
+</details>
+<div class="member-count"><strong>{{ total_membros }}</strong><span>Membros cadastrados</span></div>
+</div>
+<form method="get" class="panel filters members-filters">
+  <label>Nome<input type="search" name="nome" placeholder="Buscar pelo nome" value="{{ nome_filtro }}"></label>
+  <label>Filtro de idade<select name="idade_modo"><option value="" {{ 'selected' if not idade_modo }}>Todas as idades</option><option value="exata" {{ 'selected' if idade_modo=='exata' }}>Idade exata</option><option value="faixa" {{ 'selected' if idade_modo=='faixa' }}>Faixa de idade</option></select></label>
+  <label>Idade exata<input type="number" name="idade" min="0" max="120" placeholder="Ex.: 35" value="{{ idade_texto }}"></label>
+  <label>Idade de<input type="number" name="idade_de" min="0" max="120" placeholder="Ex.: 30" value="{{ idade_de_texto }}"></label>
+  <label>Idade até<input type="number" name="idade_ate" min="0" max="120" placeholder="Ex.: 45" value="{{ idade_ate_texto }}"></label>
+  <button class="button primary" type="submit">Filtrar</button><a class="button secondary" href="{{ url_for('pessoas') }}">Limpar</a>
+  <small class="filter-hint">Escolha “Idade exata” ou “Faixa de idade”; só os campos da opção selecionada serão usados.</small>
+</form>
+<div class="panel table-wrap"><table class="members-table"><thead><tr><th>Nome</th><th>Telefone</th><th>Endereço</th><th>Data de nascimento</th><th>Idade</th><th></th></tr></thead><tbody>
+{% for id,nome,telefone,endereco,nascimento,idade in registros %}<tr><td>{{ nome }}</td><td>{{ telefone|formatar_telefone }}</td><td>{{ endereco or '—' }}</td><td>{{ nascimento.strftime('%d/%m/%Y') if nascimento else '—' }}</td><td>{{ idade if idade is not none else '—' }}</td><td class="member-action-cell"><details class="member-actions"><summary aria-label="Opções do membro" title="Opções">⋮</summary><div class="member-action-menu"><a href="{{ url_for('editar_membro', id_pessoa=id) }}">Alterar</a><form method="post" action="{{ url_for('excluir_membro', id_pessoa=id) }}" onsubmit="return confirm('Excluir este cadastro de membro? Esta ação não pode ser desfeita.');"><button type="submit">Excluir</button></form></div></details></td></tr>{% else %}<tr><td colspan="6" class="empty">Nenhum membro corresponde aos filtros.</td></tr>{% endfor %}
+</tbody></table></div>{% endblock %}

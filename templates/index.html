@@ -1,0 +1,25 @@
+{% extends 'base.html' %}{% block title %}Painel | AD System{% endblock %}{% block content %}
+<section class="welcome"><div><p class="eyebrow">RESUMO DO CAIXA</p><h1>Painel</h1><p>Acompanhe as entradas, despesas e atividades do grupo.</p></div>{% if resumo %}<a class="members-spotlight" href="{{ url_for('pessoas') }}">Membros</a>{% endif %}</section>
+{% if resumo %}<section class="cards">
+  <article class="card balance"><span>Saldo atual</span><strong>{{ resumo.saldo|brl }}</strong><small>Considera o saldo inicial e todas as movimentações</small></article>
+  <article class="card"><span>Entradas</span><strong class="positive">{{ resumo.entradas|brl }}</strong></article>
+  <article class="card"><span>Despesas</span><strong class="negative">{{ resumo.saidas|brl }}</strong></article>
+  <article class="card"><span>Vendas recebidas</span><strong>{{ resumo.recebido|brl }}</strong><small>Pendente: {{ resumo.pendente|brl }}</small></article>
+</section>{% endif %}
+{% if resumo %}
+<section class="dashboard-report panel">
+  <div class="dashboard-report-heading">
+    <div><p class="eyebrow">VISÃO GERAL</p><h2>Relatório financeiro</h2><p class="muted">Valores acumulados do caixa deste grupo.</p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Indicador</th><th>Descrição</th><th class="right">Valor</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Saldo atual</strong></td><td>Saldo inicial somado às entradas e despesas registradas.</td><td class="right"><strong>{{ resumo.saldo|brl }}</strong></td></tr>
+      <tr><td><strong>Entradas</strong></td><td>Total de valores lançados como entrada no caixa.</td><td class="right positive"><strong>{{ resumo.entradas|brl }}</strong></td></tr>
+      <tr><td><strong>Despesas</strong></td><td>Total de despesas registradas.</td><td class="right negative"><strong>{{ resumo.saidas|brl }}</strong></td></tr>
+      <tr><td><strong>Vendas recebidas</strong></td><td>Pagamentos recebidos das vendas, totais ou parciais.</td><td class="right positive"><strong>{{ resumo.recebido|brl }}</strong></td></tr>
+    </tbody>
+  </table></div>
+</section>
+{% endif %}
+{% endblock %}

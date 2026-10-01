@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block title %}Alterar movimentação | AD System{% endblock %}{% block content %}
+<section class="page-heading"><p class="eyebrow">MOVIMENTAÇÕES</p><h1>Alterar movimentação</h1><p>Atualize os dados deste lançamento.</p></section>
+<form method="post" class="panel form-grid">
+  {% for chave,valor in filtros.items() %}<input type="hidden" name="{{ chave }}" value="{{ valor }}">{% endfor %}
+  <label>Data<input type="date" name="data" value="{{ movimento[1].isoformat() }}" required></label>
+  <label>Categoria{% if eh_pagamento %}<input value="{{ categoria_nome }}" disabled><input type="hidden" name="id_categoria" value="{{ movimento[4] }}">{% else %}<select name="id_categoria" required>{% for id_categoria,nome_categoria in categorias %}<option value="{{ id_categoria }}" {{ 'selected' if movimento[4]==id_categoria }}>{{ nome_categoria }}</option>{% endfor %}</select>{% endif %}</label>
+  <label class="wide">Descrição<input name="descricao" value="{{ movimento[2] }}" maxlength="250" required></label>
+  <label>Valor<input type="number" name="valor" min="0.01" step="0.01" value="{{ movimento[3] }}" required></label>
+  <div class="form-actions"><button class="button primary" type="submit">Salvar alterações</button><a class="button secondary" href="{{ url_for('movimentacoes', de=filtros.de, ate=filtros.ate, tipo=filtros.tipo, categoria=filtros.categoria) }}">Cancelar</a></div>
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Editar acesso | AD System{% endblock %}
+{% block content %}
+<section class="auth-panel panel">
+  <div class="page-heading"><p class="eyebrow">{{ acesso[2] }}</p><h1>Editar acesso</h1><p>Deixe a senha vazia para mantê-la. Para redefini-la, informe uma nova senha com pelo menos 12 caracteres.</p></div>
+  <form method="post" class="form-grid auth-form">
+    <label>Usuário<input name="usuario" value="{{ acesso[1] }}" required minlength="3" maxlength="64" pattern="[A-Za-z0-9_.-]+"></label>
+    <label>Nova senha<input name="senha" type="password" minlength="12" autocomplete="new-password"></label>
+    <div class="form-actions"><button class="button primary" type="submit">Salvar alterações</button><a class="button secondary" href="{{ url_for('admin_acessos') }}">Voltar</a></div>
+  </form>
+</section>
+{% endblock %}

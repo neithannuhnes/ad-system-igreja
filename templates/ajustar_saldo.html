@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Ajustar saldo inicial | AD System{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">CAIXA</p>
+  <h1>Ajustar saldo inicial</h1>
+  <p>O ajuste será lançado como uma nova movimentação para manter o histórico. O saldo inicial original será preservado.</p>
+</section>
+<form method="post" class="panel form-grid">
+  <label>Motivo do ajuste<input name="descricao" maxlength="150" placeholder="Ex.: Correção do saldo de abertura" required value="{{ request.form.get('descricao', '') }}"></label>
+  <label>Categoria<select name="id_categoria" required>
+    <option value="">Escolha se o ajuste aumenta ou reduz o caixa</option>
+    {% for id_categoria,nome,tipo in categorias %}
+    <option value="{{ id_categoria }}" {{ 'selected' if request.form.get('id_categoria') == id_categoria|string }}>{{ 'Aumenta o caixa · ' if tipo == 'ENTRADA' else 'Reduz o caixa · ' }}{{ nome }}</option>
+    {% endfor %}
+  </select></label>
+  <label>Valor (R$)<input name="valor" inputmode="decimal" placeholder="0,00" required value="{{ request.form.get('valor', '') }}"></label>
+  <label>Data<input type="date" name="data" value="{{ request.form.get('data', today) }}" required></label>
+  <div class="form-actions"><button class="button primary" type="submit">Registrar ajuste</button><a class="button secondary" href="{{ url_for('movimentacoes') }}">Cancelar</a></div>
+</form>
+{% endblock %}

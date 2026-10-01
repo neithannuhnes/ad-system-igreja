@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Entrar | AD System{% endblock %}
+{% block content %}
+<section class="auth-panel panel">
+  <div class="page-heading"><p class="eyebrow">ACESSO DO GRUPO</p><h1>Entrar no AD System</h1><p>Use o usuário e a senha do seu grupo.</p></div>
+  <form method="post" class="form-grid auth-form">
+    <label>Usuário<input name="usuario" autocomplete="username" required maxlength="64"></label>
+    <label>Senha<input name="senha" type="password" autocomplete="current-password" required></label>
+    <div class="form-actions"><button class="button primary" type="submit">Entrar</button></div>
+  </form>
+</section>
+{% endblock %}

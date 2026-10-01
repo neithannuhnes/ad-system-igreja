@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AD System{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{{ 'home-page' if request.endpoint == 'inicio' else '' }}">
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('inicio') if session.get('id_usuario') else url_for('login') }}"><img src="{{ url_for('static', filename='logo-ad.png') }}" alt=""><span>AD System</span></a>
+    {% if session.get('id_usuario') %}
+    <div class="session-actions"><span class="group-badge">{{ grupo_atual }}</span><details class="menu-dropdown">
+      <summary class="menu-toggle" aria-label="Abrir menu"><span></span><span></span><span></span></summary>
+      <nav class="nav tabs" id="menu-secoes">
+      {% if session.get('is_admin') %}
+      <a class="nav-access {{ 'active' if request.endpoint in ['admin_acessos','admin_novo_acesso','admin_editar_acesso','admin_alterar_status'] else '' }}" href="{{ url_for('admin_acessos') }}">Acessos dos grupos</a>
+      <a class="nav-groups {{ 'active' if request.endpoint in ['admin_grupos','admin_novo_grupo','admin_renomear_grupo','admin_excluir_grupo'] else '' }}" href="{{ url_for('admin_grupos') }}">Gerenciar grupos</a>
+      {% else %}
+      <a class="nav-panel {{ 'active' if request.endpoint=='inicio' else '' }}" href="{{ url_for('inicio') }}">Painel</a>
+      <a class="nav-movements {{ 'active' if request.endpoint in ['movimentacoes','editar_movimentacao','excluir_movimentacao'] else '' }}" href="{{ url_for('movimentacoes') }}">Movimentações</a>
+      <a class="nav-sales {{ 'active' if request.endpoint in ['vendas','registrar_pagamento'] else '' }}" href="{{ url_for('vendas') }}">Vendas</a>
+      <a class="nav-incomes {{ 'active' if request.endpoint=='nova_entrada' else '' }}" href="{{ url_for('nova_entrada') }}">Entradas</a>
+      <a class="nav-expenses {{ 'active' if request.endpoint=='nova_despesa' else '' }}" href="{{ url_for('nova_despesa') }}">Saídas</a>
+      <a class="nav-activities {{ 'active' if request.endpoint in ['lista_atividades','atividade_detalhe','arquivar_atividade'] else '' }}" href="{{ url_for('lista_atividades') }}">Atividades</a>
+      <a class="nav-closing {{ 'active' if request.endpoint=='fechamento' else '' }}" href="{{ url_for('fechamento') }}">Fechamento</a>
+      <a class="nav-members {{ 'active' if request.endpoint in ['pessoas','editar_membro','excluir_membro'] else '' }}" href="{{ url_for('pessoas') }}">Membros</a>
+      {% endif %}
+      <form action="{{ url_for('sair') }}" method="post"><button class="logout-link" type="submit">Sair ({{ usuario_atual }})</button></form>
+      </nav>
+    </details></div>
+    {% endif %}
+  </header>
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="alerts">{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer><div class="footer-brand"><img src="{{ url_for('static', filename='logo-ad-transparente.png') }}" alt=""><span>AD System</span></div></footer>
+</body>
+</html>

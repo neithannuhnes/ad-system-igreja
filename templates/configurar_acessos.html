@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Configuração inicial | AD System{% endblock %}
+{% block content %}
+<section class="auth-panel panel">
+  <div class="page-heading"><p class="eyebrow">PRIMEIRO ACESSO</p><h1>Criar acesso de administrador</h1><p>Esse acesso permitirá configurar os grupos e as contas dos líderes.</p></div>
+  <form method="post" class="form-grid auth-form">
+    <label>Usuário<input name="usuario" autocomplete="username" required minlength="3" maxlength="64" pattern="[A-Za-z0-9_.-]+"></label>
+    <label>Senha (mínimo 12 caracteres)<input name="senha" type="password" autocomplete="new-password" required minlength="12"></label>
+    <label>Confirmar senha<input name="confirmar_senha" type="password" autocomplete="new-password" required minlength="12"></label>
+    <div class="form-actions"><button class="button primary" type="submit">Criar administrador</button></div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nova despesa</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <header class="cabecalho">
+            <h1>➖ Nova despesa</h1>
+            <p>Registrar saída do caixa</p>
+        </header>
+
+        <section class="saldo">
+
+    <form method="POST">
+
+        <label>Descrição</label>
+
+        <input
+            type="text"
+            name="descricao"
+            placeholder="Ex.: Compra de ingredientes"
+            required
+        >
+
+        <br><br>
+
+        <label>Categoria</label>
+
+        <select name="id_categoria" required>
+            <option value="5">Ingredientes</option>
+            <option value="6">Alimentação</option>
+            <option value="7">Decoração</option>
+            <option value="8">Contratação</option>
+            <option value="9">Presente</option>
+            <option value="10">Outros</option>
+        </select>
+
+        <br><br>
+
+        <label>Valor</label>
+
+        <input
+            type="number"
+            name="valor"
+            step="0.01"
+            min="0.01"
+            placeholder="0,00"
+            required
+        >
+
+        <br><br>
+
+        <label>Data</label>
+
+        <input
+            type="date"
+            name="data"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit" class="botao">
+            SALVAR DESPESA
+        </button>
+
+    </form>
+
+</section>
+
+            <label>Descrição</label>
+
+            <input
+                type="text"
+                placeholder="Ex.: Compra de ingredientes"
+            >
+
+            <br><br>
+
+            <label>Categoria</label>
+
+            <select>
+                <option>Ingredientes</option>
+                <option>Alimentação</option>
+                <option>Decoração</option>
+                <option>Contratação</option>
+                <option>Presente</option>
+                <option>Outros</option>
+            </select>
+
+            <br><br>
+
+            <label>Valor</label>
+
+            <input
+                type="number"
+                step="0.01"
+                placeholder="0,00"
+            >
+
+            <br><br>
+
+            <label>Data</label>
+
+            <input
+                type="date"
+            >
+
+            <br><br>
+
+            <button class="botao">
+                SALVAR DESPESA
+            </button>
+
+        </section>
+
+        <a href="/" class="botao">
+            ← Voltar
+        </a>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Acessos dos grupos | AD System{% endblock %}
+{% block content %}
+<section class="page-heading"><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Acessos dos grupos</h1><p>Crie e gerencie os usuários que entram no AD System.</p><a class="button secondary small" href="{{ url_for('admin_grupos') }}">Gerenciar grupos ({{ total_grupos }}/{{ limite_grupos }})</a></section>
+<section class="panel">
+  <h2 class="section-title">Adicionar acesso</h2>
+  <form action="{{ url_for('admin_novo_acesso') }}" method="post" class="form-grid access-form">
+    <label>Grupo existente
+      <select name="id_grupo">
+        <option value="">Selecione um grupo</option>
+        {% for id_grupo,nome in grupos %}<option value="{{ id_grupo }}">{{ nome }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Ou crie um grupo<input name="novo_grupo" maxlength="100" placeholder="Ex.: Música" {% if total_grupos >= limite_grupos %}disabled{% endif %}></label>
+    <label>Usuário<input name="usuario" required minlength="3" maxlength="64" pattern="[A-Za-z0-9_.-]+" autocomplete="off"></label>
+    <label>Senha inicial (mínimo 12 caracteres)<input name="senha" type="password" required minlength="12" autocomplete="new-password"></label>
+    <p class="muted form-note">Selecione um grupo sem acesso ou informe um nome novo. Limite atual: {{ total_grupos }} de {{ limite_grupos }} grupos. Cada grupo terá um acesso.</p>
+    <div class="form-actions"><button class="button primary" type="submit">Adicionar acesso</button></div>
+  </form>
+</section>
+<section class="panel table-wrap">
+  <h2 class="section-title">Grupos cadastrados</h2>
+  <table><thead><tr><th>Grupo</th><th>Usuário</th><th>Situação</th><th class="right">Opções</th></tr></thead><tbody>
+  {% for id_grupo,nome,id_usuario,usuario,ativo in acessos %}
+    <tr><td>{{ nome }}</td><td>{{ usuario or '—' }}</td>
+      <td>{% if id_usuario %}<span class="tag {{ 'green' if ativo else 'red' }}">{{ 'Ativo' if ativo else 'Desativado' }}</span>{% else %}<span class="muted">Sem acesso</span>{% endif %}</td>
+      <td class="right">{% if id_usuario %}<div class="access-actions">
+        <a class="button secondary small" href="{{ url_for('admin_editar_acesso', user_id=id_usuario) }}">Editar</a>
+        <form action="{{ url_for('admin_alterar_status', user_id=id_usuario) }}" method="post"><button class="button small {{ 'secondary' if ativo else 'primary' }}" type="submit">{{ 'Desativar' if ativo else 'Reativar' }}</button></form>
+      </div>{% else %}—{% endif %}</td>
+    </tr>
+  {% else %}<tr><td colspan="4" class="empty">Nenhum grupo cadastrado.</td></tr>{% endfor %}
+  </tbody></table>
+</section>
+{% endblock %}

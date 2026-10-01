@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}{{ atividade[0] }} | AD System{% endblock %}
+{% block content %}
+<section class="page-heading report-heading">
+  <div class="report-heading-main"><p class="eyebrow">ATIVIDADE</p>
+  <h1>{{ atividade[0] }}</h1>
+  <p>{% if atividade[1] %}Data: {{ atividade[1].strftime('%d/%m/%Y') }}{% endif %}{% if atividade[1] and atividade[2] %} · {% endif %}{{ atividade[2] or '' }}</p>
+  <a class="button secondary small" href="{{ url_for('lista_atividades') }}">← Voltar às atividades</a></div>
+  <a class="button primary report-download" href="{{ url_for('pdf_atividade', atividade_id=request.view_args['atividade_id'], de=de, ate=ate, situacao=situacao) }}">Baixar PDF</a>
+</section>
+
+<form class="panel filters compact-filters" method="get">
+  <label>De<input type="date" name="de" value="{{ de }}"></label>
+  <label>Até<input type="date" name="ate" value="{{ ate }}"></label>
+  <label>Situação
+    <select name="situacao">
+      <option value="" {{ 'selected' if not situacao }}>Todas</option>
+      <option value="pendente" {{ 'selected' if situacao == 'pendente' }}>Pendentes</option>
+      <option value="pago" {{ 'selected' if situacao == 'pago' }}>Pagos</option>
+      <option value="parcial" {{ 'selected' if situacao == 'parcial' }}>Parcialmente pagos</option>
+    </select>
+  </label>
+  <button class="button primary" type="submit">Filtrar</button>
+  <a class="button secondary" href="{{ url_for('atividade_detalhe', atividade_id=request.view_args['atividade_id']) }}">Limpar</a>
+</form>
+
+<section class="cards report-cards">
+  <article class="card"><span>Total vendido</span><strong>{{ totais.vendido|brl }}</strong></article>
+  <article class="card"><span>Recebido</span><strong class="positive">{{ totais.recebido|brl }}</strong></article>
+  <article class="card"><span>Pendente</span><strong class="negative">{{ totais.pendente|brl }}</strong></article>
+</section>
+
+<div class="panel table-wrap"><table>
+  <thead><tr><th>Nome</th><th>Data</th><th>Produto</th><th class="right">Quantidade</th><th class="right">Valor</th><th class="right">Recebido</th><th class="right">Pendente</th><th>Situação</th></tr></thead>
+  <tbody>
+  {% for id_venda,nome,data_venda,produto,quantidade,total,recebido,pendente,situacao_linha in linhas %}
+  <tr><td>{{ nome }}</td><td>{{ data_venda.strftime('%d/%m/%Y') }}</td><td>{{ produto or '—' }}</td><td class="right">{{ quantidade }}</td><td class="right">{{ total|brl }}</td><td class="right">{{ recebido|brl }}</td><td class="right">{{ pendente|brl }}</td><td><span class="tag {{ 'green' if situacao_linha=='Pago' else ('partial' if situacao_linha=='Parcial' else 'red') }}">{{ situacao_linha }}</span></td></tr>
+  {% else %}<tr><td colspan="8" class="empty">Nenhuma venda encontrada para esses filtros.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+
+<h2>Somatória dos produtos vendidos</h2>
+<div class="panel table-wrap"><table>
+  <thead><tr><th>Produto</th><th class="right">Quantidade vendida</th><th class="right">Total vendido</th><th class="right">Recebido</th><th class="right">Pendente</th></tr></thead>
+  <tbody>
+  {% for produto,resumo in produtos %}<tr><td>{{ produto }}</td><td class="right">{{ resumo.quantidade }}</td><td class="right">{{ resumo.vendido|brl }}</td><td class="right">{{ resumo.recebido|brl }}</td><td class="right">{{ resumo.pendente|brl }}</td></tr>
+  {% else %}<tr><td colspan="5" class="empty">Não há produtos vendidos para somar.</td></tr>{% endfor %}
+  </tbody>
+  <tfoot><tr><th>Total geral</th><th class="right">{{ quantidade_total }}</th><th class="right">{{ totais.vendido|brl }}</th><th class="right">{{ totais.recebido|brl }}</th><th class="right">{{ totais.pendente|brl }}</th></tr></tfoot>
+</table></div>
+{% endblock %}
