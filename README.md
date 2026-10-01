@@ -14,4 +14,4 @@ Sistema web para administração de caixa, movimentações, vendas, atividades e
 3. Copie `.env.example` para `.env` e informe os dados do seu banco e uma chave secreta.
 4. Inicie a aplicação com `python app.py`.
 
-O arquivo `.env` contém configurações privadas e não deve ser enviado ao GitHub.
+As configurações locais são feitas no arquivo `.env`, criado a partir do modelo `.env.example`.
